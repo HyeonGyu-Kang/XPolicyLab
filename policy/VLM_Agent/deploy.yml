@@ -1,0 +1,28 @@
+# VLM_Agent: LangChain tool-calling VLM agent driving RoboDojo.
+# The agent loop runs client-side (deploy.py, same process as Isaac Sim).
+# The ws policy server (model.py) only hosts optional heavy perception tools.
+policy_name: VLM_Agent
+protocol: ws
+host: localhost
+port: null
+bench_name: null
+task_name: null
+ckpt_name: null
+env_cfg_type: null
+seed: null
+action_type: ee        # ee mode: agent emits world-frame EE poses, sim solves IK
+gpu_id: null
+eval_batch: false      # agent loop is single-env only
+
+# --- agent settings (read by agent/llm.py; env vars override) ---
+llm:
+  model: Qwen/Qwen3.8-27B
+  base_url: http://localhost:8001/v1
+  api_key: none
+  temperature: 0.0
+  enable_thinking: false
+agent:
+  max_rounds: 60        # LLM calls per episode (hard cap, independent of step_lim)
+  cameras: [cam_head, cam_left_wrist, cam_right_wrist]
+  image_max_side: 480
+  log_dir: null         # null -> <save_dir>/agent_log
